@@ -5,7 +5,13 @@ const INITIALSTATE = {
   category: null,
   categoriesLoading: false,
   categoryLoading: false,
-  categorySaving: false
+  categorySaving: false,
+  editing: false,
+  modal: {
+    open: false,
+    data: null,
+    editing: false
+  }
 }
 
 const categoryReducer = (state = INITIALSTATE, action) => {
@@ -40,6 +46,41 @@ const categoryReducer = (state = INITIALSTATE, action) => {
       return {
         ...state,
         categories: [...state.categories, action.payload]
+      }
+
+    case categoryActionTypes.UPDATE_CATEGORY_SUCCESS:
+      return {
+        ...state,
+        categories: state.categories.map(c => {
+          if (c.id == action.payload.id) {
+            c = action.payload;
+            return c;
+          }
+          return c;
+        }),
+        modal: {
+          open: false,
+          editing: false,
+          data: null
+        }
+      }
+
+    case categoryActionTypes.DELETE_CATEGORY_SUCCESS:
+      return {
+        ...state,
+        categories: state.categories.filter(c => c.id !== action.payload),
+      }
+
+    case categoryActionTypes.OPEN_CATEGORY_MODAL:
+      return {
+        ...state,
+        modal: action.payload
+      }
+
+    case categoryActionTypes.CLOSE_CATEGORY_MODAL:
+      return {
+        ...state,
+        modal: action.payload
       }
 
     default:

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -29,30 +29,46 @@ const validationSchema = Yup.object().shape({
 function CategoryDialog(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { category, categorySaving } = useSelector(state => state.categoryReducer)
-  const { onClose, selectedValue, open } = props;
+  const { category, categorySaving, modal } = useSelector(state => state.categoryReducer)
+  const { onClose } = props;
   const [files, setFiles] = useState([]);
 
   const [values, setValues] = useState({ name: '', description: '' });
 
   const handleClose = () => {
-    onClose(selectedValue);
+    dispatch(categoryActions.closeCategoryModalAction({ open: false, data: null }));
   };
 
-  const updateValues = () => {
-    setValues({ name: 'test', description: 'test' });
-  }
+  // const updateValues = () => {
+  //   setValues({ name: 'test', description: 'test' });
+  // }
+
+  useEffect(() => {
+    if (modal.editing) {
+      setValues({ name: modal.data.name, description: modal.data.description })
+    } else {
+      setValues({ name: '', description: '' })
+    }
+  }, [modal])
 
   return (
-    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
-      <DialogTitle id="simple-dialog-title">Nueva categoria</DialogTitle>
+    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={modal.open}>
+      <DialogTitle id="simple-dialog-title">{modal.editing ? 'Modificar categoria' : 'Nueva categoria'}</DialogTitle>
       <Formik
         enableReinitialize
         initialValues={values}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
-          dispatch(categoryActions.createCategoryAction(values));
-          onClose(files);
+          if (modal.editing) {
+            dispatch(categoryActions.updateCategoryAction({
+              id: modal.data.id,
+              name: values.name,
+              description: values.description
+            }));
+          } else {
+            dispatch(categoryActions.createCategoryAction(values));
+          }
+          //onClose(files);
           setSubmitting(false);
         }}>
         {({ values, isSubmitting, handleChange, handleBlur, isValid }) => (
@@ -82,7 +98,6 @@ function CategoryDialog(props) {
                   margin="dense">
                 </TextField>
               </div>
-              <pre>{JSON.stringify(values, null, 2)}</pre>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose} color="primary">

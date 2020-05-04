@@ -6,9 +6,17 @@ export const categoryActionTypes = {
   CREATE_CATEGORY: 'CREATE_CATEGORY',
   CREATE_CATEGORY_SUCCESS: 'CREATE_CATEGORY_SUCCESS',
   CREATE_CATEGORY_ERROR: 'CREATE_CATEGORY_ERROR',
+  UPDATE_CATEGORY: 'UPDATE_CATEGORY',
+  UPDATE_CATEGORY_SUCCESS: 'UPDATE_CATEGORY_SUCCESS',
+  UPDATE_CATEGORY_ERROR: 'UPDATE_CATEGORY_ERROR',
+  DELETE_CATEGORY: 'DELETE_CATEGORY',
+  DELETE_CATEGORY_SUCCESS: 'DELETE_CATEGORY_SUCCESS',
+  DELETE_CATEGORY_ERROR: 'DELETE_CATEGORY_ERROR',
   GET_CATEGORY: 'GET_CATEGORY',
   GET_CATEGORY_SUCCESS: 'GET_CATEGORY_SUCCESS',
-  GET_CATEGORY_ERROR: 'GET_CATEGORY_ERROR'
+  GET_CATEGORY_ERROR: 'GET_CATEGORY_ERROR',
+  OPEN_CATEGORY_MODAL: 'OPEN_CATEGORY_MODAL',
+  CLOSE_CATEGORY_MODAL: 'CLOSE_CATEGORY_MODAL'
 };
 
 export const categoryActions = {
@@ -36,16 +44,48 @@ export const categoryActions = {
     type: categoryActionTypes.CREATE_CATEGORY_ERROR,
     payload
   }),
+  updateCategoryAction: (payload) => ({
+    type: categoryActionTypes.UPDATE_CATEGORY,
+    payload
+  }),
+  updateCategorySuccessAction: (payload) => ({
+    type: categoryActionTypes.UPDATE_CATEGORY_SUCCESS,
+    payload
+  }),
+  updateCategoryErrorAction: (payload) => ({
+    type: categoryActionTypes.UPDATE_CATEGORY_ERROR,
+    payload
+  }),
+  deleteCategoryAction: (payload) => ({
+    type: categoryActionTypes.DELETE_CATEGORY,
+    payload
+  }),
+  deleteCategorySuccessAction: (payload) => ({
+    type: categoryActionTypes.DELETE_CATEGORY_SUCCESS,
+    payload
+  }),
+  deleteCategoryErrorAction: (payload) => ({
+    type: categoryActionTypes.DELETE_CATEGORY_ERROR,
+    payload
+  }),
   getCategoryAction: (payload) => ({
     type: categoryActionTypes.GET_CATEGORY,
     payload
   }),
   getCategorySuccessAction: (payload) => ({
-    type: CategoriesActionTypes.GET_CATEGORY_SUCCESS,
+    type: categoryActionTypes.GET_CATEGORY_SUCCESS,
     payload
   }),
   getCategoryErrorAction: (payload) => ({
-    type: CategoriesActionTypes.GET_CATEGORY_ERROR,
+    type: categoryActionTypes.GET_CATEGORY_ERROR,
+    payload
+  }),
+  openCategoryModalAction: (payload) => ({
+    type: categoryActionTypes.OPEN_CATEGORY_MODAL,
+    payload
+  }),
+  closeCategoryModalAction: (payload) => ({
+    type: categoryActionTypes.CLOSE_CATEGORY_MODAL,
     payload
   }),
 }

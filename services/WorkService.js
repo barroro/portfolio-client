@@ -21,7 +21,7 @@ export class WorkService extends BaseService {
     return api.get('works');
   }
 
-  getWork(id) {
+  get(id) {
     return api.get('works/' + id);
   }
 }

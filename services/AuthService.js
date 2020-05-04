@@ -18,7 +18,7 @@ export default class AuthService {
         password
       })
     }).then(res => {
-      cookie.set("token", res.accessToken, { expires: 1 });
+      //cookie.set("token", res.accessToken, { expires: 1 });
       this.setToken(res.accessToken);
       this.setProfile(res.user);
       return Promise.resolve(res);
@@ -48,6 +48,7 @@ export default class AuthService {
 
   setToken(idToken) {
     // Saves user token to localStorage
+    cookie.set("token", idToken);
     localStorage.setItem('id_token', idToken)
   }
 

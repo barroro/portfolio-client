@@ -9,6 +9,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
 import InboxIcon from '@material-ui/icons/Inbox';
 import CategoryIcon from '@material-ui/icons/Category';
+import ShareIcon from '@material-ui/icons/Share';
 import Link from '../src/Link';
 
 export const mainListItems = (
@@ -17,37 +18,43 @@ export const mainListItems = (
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
-      <ListItemText primary="Home" />
+      <ListItemText primary="Inicio" />
     </ListItem>
     <ListItem button component={Link} href="/dashboard/works">
       <ListItemIcon>
         <ArtTrackIcon />
       </ListItemIcon>
-      <ListItemText primary="Works" />
+      <ListItemText primary="Proyectos" />
     </ListItem>
     <ListItem button component={Link} href="/dashboard/about">
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
-      <ListItemText primary="About" />
+      <ListItemText primary="Sobre mi" />
     </ListItem>
     <ListItem button component={Link} href="/dashboard/messages">
       <ListItemIcon>
         <InboxIcon />
       </ListItemIcon>
-      <ListItemText primary="Messages" />
+      <ListItemText primary="Mensajes" />
     </ListItem>
     <ListItem button component={Link} href="/dashboard/images">
       <ListItemIcon>
         <PhotoLibraryIcon />
       </ListItemIcon>
-      <ListItemText primary="Images" />
+      <ListItemText primary="Imagenes" />
     </ListItem>
     <ListItem button component={Link} href="/dashboard/categories">
       <ListItemIcon>
         <CategoryIcon />
       </ListItemIcon>
-      <ListItemText primary="Categories" />
+      <ListItemText primary="Categorias" />
+    </ListItem>
+    <ListItem button component={Link} href="/dashboard/social-networks">
+      <ListItemIcon>
+        <ShareIcon />
+      </ListItemIcon>
+      <ListItemText primary="Redes sociales" />
     </ListItem>
   </div>
 );

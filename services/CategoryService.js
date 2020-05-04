@@ -17,8 +17,8 @@ export class CategoryService {
     return api.post('categories', data);
   }
 
-  update(data, id) {
-    return api.put('categories/' + id, data);
+  update(data) {
+    return api.put('categories/' + data.id, data);
   }
 
   delete(id) {

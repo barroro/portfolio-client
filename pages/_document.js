@@ -14,6 +14,7 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
+          <script src="https://kit.fontawesome.com/3021782984.js" crossorigin="anonymous"></script>
         </Head>
         <body>
           <Main />
@@ -53,7 +54,7 @@ MyDocument.getInitialProps = async (ctx) => {
 
   ctx.renderPage = () =>
     originalRenderPage({
-      enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
+      enhanceApp: (App) => (props) => sheets.collect(<App {...props}></App>),
     });
 
   const initialProps = await Document.getInitialProps(ctx);

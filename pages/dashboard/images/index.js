@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { imageActions } from '../../../redux/store/actions/ImageActions';
+import Img from 'react-cool-img';
 
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
@@ -30,6 +31,11 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: 'cover',
     width: '100%',
     height: '100%'
+  },
+  img: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover'
   }
 }));
 
@@ -79,6 +85,12 @@ export default function Images() {
                     <Paper className={classes.paper}>
                       <div className={classes.imgContainer}>
                         {image.name}
+                        <Img
+                          style={{ backgroundColor: 'grey', width: '100', height: '100' }}
+                          className={classes.img}
+                          src={`http://localhost:8000/${image.path}`}
+                          alt="React Cool Img"
+                        />
                       </div>
                     </Paper>
                   </Grid>

@@ -23,7 +23,7 @@ import Link from '../../../src/Link';
 const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
-    width: '80%',
+    width: '100%',
     '& .MuiTextField-root': {
       //margin: theme.spacing(1),
       width: '100%',

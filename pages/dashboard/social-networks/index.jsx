@@ -8,14 +8,12 @@ const Typography = dynamic(import("@material-ui/core/Typography"));
 const Container = dynamic(import("@material-ui/core/Container"));
 const Button = dynamic(import("@material-ui/core/Button"));
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CategoriesTable from '../../../components/categories/categories-table';
-import Link from '../../../src/Link';
-import { categoryActions } from '../../../redux/store/actions/CategoryActions';
-import CategoryDialog from '../../../components/categories/category-dialog';
+import { socialNetworkActions } from '../../../redux/store/actions/socialNetworkActions';
+import SocialNetworksTable from '../../../components/social-networks/social-networks-table';
+import SocialNetworkDialog from '../../../components/social-networks/social-network-dialog';
 
-// const Copyright = dynamic(import("../../src/Copyright"));
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,34 +37,24 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Categories() {
+export default function SocialNetworks() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { categories } = useSelector(state => state.categoryReducer);
+  const { socialNetworks } = useSelector(state => state.socialNetworkReducer);
 
   //Get categories
   useEffect(() => {
-    dispatch(categoryActions.getCategoriesAction());
-    console.log('Categories: ', categories);
+    dispatch(socialNetworkActions.getSocialNetworksAction());
+    console.log('Social networks: ', socialNetworks);
   }, [dispatch])
 
-  const [open, setOpen] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState(null);
-
   const handleClickOpen = () => {
-    dispatch(categoryActions.openCategoryModalAction({ open: true, data: null, editing: false }));
-    //setOpen(true);
+    dispatch(socialNetworkActions.openSocialNetworkModalAction({ open: true, data: null, editing: false }));
   };
 
-  // const handleClose = (value) => {
-  //   setOpen(false);
-  //   setSelectedValue(value);
-  // };
-
   const edit = (id) => {
-    let category = categories.find(c => c.id == id);
-    dispatch(categoryActions.openCategoryModalAction({ open: true, data: category, editing: true }));
-    //setOpen(true);
+    let category = socialNetworks.find(c => c.id == id);
+    dispatch(socialNetworkActions.openSocialNetworkModalAction({ open: true, data: category, editing: true }));
   };
 
   return (
@@ -80,12 +68,12 @@ export default function Categories() {
             alignItems="center"
           >
             <Typography gutterBottom variant="h6" component="h2">
-              Categorias
+              Redes sociales
             </Typography>
-            <Button variant="outlined" color="primary" onClick={handleClickOpen}>Nueva categoria</Button>
-            <CategoryDialog />
+            <Button variant="outlined" color="primary" onClick={handleClickOpen}>Nueva red social</Button>
+            <SocialNetworkDialog />
           </Grid>
-          <CategoriesTable onClickEdit={edit} />
+          <SocialNetworksTable onClickEdit={edit} />
         </CardContent>
       </Card>
     </Container>

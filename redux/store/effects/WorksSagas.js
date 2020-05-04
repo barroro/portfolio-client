@@ -16,7 +16,7 @@ function* getWorks() {
 
 function* getWork(action) {
   try {
-    const { data } = yield call(workService.getWork, action.payload);
+    const { data } = yield call(workService.get, action.payload);
     yield put(worksActions.getWorkSuccessAction(data));
   } catch (error) {
     console.log(error);

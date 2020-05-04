@@ -6,6 +6,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Tooltip from '@material-ui/core/Tooltip';
 import Paper from '@material-ui/core/Paper';
 import { Grid, IconButton } from '@material-ui/core';
 import { useSelector } from 'react-redux';
@@ -16,33 +17,29 @@ import PropTypes from 'prop-types';
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
+  },
+  circle: {
+    display: 'flex',
+    height: '26px',
+    width: '25px',
+    borderRadius: '50%',
+    backgroundColor: 'rgba(0,0,0,0.1)'
   }
 });
 
-// const noResults = (items) = (
-//   <Grid
-//     container
-//     direction="row"
-//     justify="center"
-//     alignItems="center"
-//   >
-//     <span>No se han encontrado resultados</span>
-//   </Grid>
-// );
-
-function CategoriesTable(props) {
+function SocialNetworksTable(props) {
 
   const { onClickEdit } = props;
   const classes = useStyles();
 
-  const { categories, categoriesLoading } = useSelector(state => state.categoryReducer);
+  const { socialNetworks, socialNetworksLoading } = useSelector(state => state.socialNetworkReducer);
 
   const edit = (id) => {
     onClickEdit(id);
   }
 
   const loadingContainer = () => {
-    if (categoriesLoading) {
+    if (socialNetworksLoading) {
       return (
         <div className="loading-container">
           <span>Cargando...</span>
@@ -58,20 +55,32 @@ function CategoriesTable(props) {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Nombre</TableCell>
-            <TableCell>Descripción</TableCell>
+            <TableCell>Título</TableCell>
+            <TableCell>Url</TableCell>
+            <TableCell>Color</TableCell>
+            <TableCell>Icono</TableCell>
             <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {categories.length > 0 && categories.map((c) => (
-            <TableRow key={c.id}>
+          {socialNetworks.length > 0 && socialNetworks.map((s) => (
+            <TableRow key={s.id}>
               <TableCell component="th" scope="row">
-                {c.name}
+                {s.title}
               </TableCell>
-              <TableCell>{c.description}</TableCell>
+              <TableCell>
+                <a href={s.url}>{s.url}</a>
+              </TableCell>
+              <TableCell>
+                <Tooltip title={s.color}>
+                  <span className={classes.circle} style={{ backgroundColor: s.color }}></span>
+                </Tooltip>
+              </TableCell>
+              <TableCell>
+                <i className={s.icon} style={{ fontSize: '26px' }}></i>
+              </TableCell>
               <TableCell align="right">
-                <IconButton size="small" aria-label="delete" onClick={() => edit(c.id)}>
+                <IconButton size="small" aria-label="delete" onClick={() => edit(s.id)}>
                   <EditIcon />
                 </IconButton>
               </TableCell>
@@ -84,8 +93,8 @@ function CategoriesTable(props) {
   );
 }
 
-CategoriesTable.propTypes = {
+SocialNetworksTable.propTypes = {
   onClickEdit: PropTypes.func.isRequired
 }
 
-export default CategoriesTable;
+export default SocialNetworksTable;
