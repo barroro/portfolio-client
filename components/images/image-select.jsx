@@ -6,10 +6,12 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+import CloseIcon from '@material-ui/icons/Close';
 import PreviewImagesDialog from './preview-images-dialog';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
+    position: 'relative',
     textAlign: 'center',
     color: theme.palette.text.secondary,
     '&.selected': {
@@ -73,8 +75,14 @@ function ImageSelect(props) {
     setOpen(false);
   };
 
+  const removeImage = (i) => {
+    images.splice(i, 1);
+    setImages(images);
+    onChange(images);
+  }
+
   return (
-    <Paper variant="outlined" className={classes.imgSelectContainer}>
+    <Paper variant="outlined" className="img-select-container">
       <Grid container spacing={3}>
         <PreviewImagesDialog open={open} onClose={handleClose} values={images} />
         {
@@ -83,25 +91,30 @@ function ImageSelect(props) {
               <AddIcon />
             </IconButton>
           ) : (
-              <Grid item xs={12} className={classes.helperContainer}>
-                <Button variant="outlined" color="primary" onClick={handleClickOpen}>Selecciona imagenes</Button>
+              <Grid item xs={12} className="helper-container">
+                <Button variant="outlined" color="primary" onClick={handleClickOpen} size="small">Selecciona imagenes</Button>
               </Grid>
             )
         }
         {
-          images && images.map(image => {
+          images && images.map((image, i) => {
             return (
               <Grid item xs={4} key={`container-image-` + Math.random()}>
-                <Paper variant="outlined" className={classes.paper}>
-                  <div className={classes.imgContainer}>
+                <Paper variant="outlined" className="preview-img-item">
+                  <div className="overlay-container">
+                    <IconButton size="small" onClick={() => removeImage(i)}>
+                      <CloseIcon />
+                    </IconButton>
+                  </div>
+                  <div className="img-container">
                     <Img
                       style={{ backgroundColor: 'grey', width: '100', height: '100' }}
-                      className={classes.img}
                       src={`http://localhost:8000/${image.path}`}
                       alt="React Cool Img"
+                      cache
                     />
                   </div>
-                  <div className={classes.imgTitle}>
+                  <div className="img-title">
                     <span>{image.name}</span>
                   </div>
                 </Paper>

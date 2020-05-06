@@ -1,21 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import Head from 'next/head';
 
-import dynamic from "next/dynamic";
-import PublicLayout from '../components/public-layout';
-
-const Container = dynamic(import("@material-ui/core/Container"));
-const Typography = dynamic(import("@material-ui/core/Typography"));
-const Box = dynamic(import("@material-ui/core/Box"));
-const ProTip = dynamic(import("../src/ProTip"));
-const Link = dynamic(import("../src/Link"));
-const Copyright = dynamic(import("../src/Copyright"));
+import { useDispatch, useSelector } from 'react-redux';
+import { categoryActions } from '../redux/store/actions/CategoryActions';
+import Footer from '../components/footer';
+import CategoryTabs from '../components/category-tabs';
+import Header from '../components/header';
+import WorksPreview from '../components/works-preview';
 
 export default function Index() {
+  const handleClickTab = (category) => {
+    console.log(category)
+  }
   return (
-    <PublicLayout>
-      <div className="section-100vh">
-        <h1>Main page title</h1>
-      </div>
-    </PublicLayout>
+    <div className="main-page">
+      <Head>
+        <title>Laura Solano | Graphic Designer</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      <Header />
+      <CategoryTabs onChangeTab={handleClickTab} />
+      <WorksPreview />
+      <Footer />
+    </div>
   );
 }

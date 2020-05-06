@@ -29,7 +29,8 @@ const worksReducer = (state = INITIALSTATE, action) => {
     case WorksActionTypes.GET_WORK:
       return {
         ...state,
-        workLoading: true
+        workLoading: true,
+        work: null
       }
 
     case WorksActionTypes.GET_WORK_SUCCESS:
@@ -44,6 +45,24 @@ const worksReducer = (state = INITIALSTATE, action) => {
         ...state,
         work: action.payload,
         workLoading: false
+      }
+
+    case WorksActionTypes.CREATE_WORK_SUCCESS:
+      return {
+        ...state,
+        works: [...state.works, action.payload],
+      }
+
+    case WorksActionTypes.UPDATE_WORK_SUCCESS:
+      return {
+        ...state,
+        works: state.works.map(c => {
+          if (c.id == action.payload.id) {
+            c = action.payload;
+            return c;
+          }
+          return c;
+        })
       }
 
     default:

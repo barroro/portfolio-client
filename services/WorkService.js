@@ -2,6 +2,8 @@ import Axios from "axios";
 import { BaseService } from "./BaseService";
 import api from './api';
 
+//let settings = { headers: { 'content-type': 'multipart/form-data' } }
+
 export async function getWorksApi() {
   // const result = Axios.request({
   //   method: 'get',
@@ -24,4 +26,17 @@ export class WorkService extends BaseService {
   get(id) {
     return api.get('works/' + id);
   }
+
+  create(data) {
+    return api.post('works', data);
+  }
+
+  update(data) {
+    return api.put('works/' + data.id, JSON.stringify(data));
+  }
+
+  delete(id) {
+    return api.delete('works/' + id, data);
+  }
+
 }

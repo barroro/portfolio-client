@@ -1,22 +1,23 @@
 import React, { useEffect, Fragment, useState } from 'react';
-
 import dynamic from "next/dynamic";
-import DashboardLayout from '../../../components/dashboard-layout';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { worksActions } from '../../../redux/store/actions/WorksActions';
-import { makeStyles, TextField, Grid } from '@material-ui/core';
+import { snackBarActions } from '../../../redux/store/actions/SnackBarActions';
 
 const Typography = dynamic(import("@material-ui/core/Typography"));
 const Container = dynamic(import("@material-ui/core/Container"));
 const Button = dynamic(import("@material-ui/core/Button"));
 const Paper = dynamic(import("@material-ui/core/Paper"));
-import Card from '@material-ui/core/Card';
+import Toolbar from '@material-ui/core/Toolbar';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import { Form, Formik, Field } from 'formik';
-import Dropzone, { useDropzone } from 'react-dropzone';
 import WorksTable from '../../../components/works/works-table';
 import Link from '../../../src/Link';
+import InputBase from '@material-ui/core/InputBase';
+import { fade, makeStyles } from '@material-ui/core/styles';
+import MenuIcon from '@material-ui/icons/Menu';
+import SearchIcon from '@material-ui/icons/Search';
 
 // const Copyright = dynamic(import("../../src/Copyright"));
 
@@ -81,7 +82,58 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '4px',
     padding: '20px',
     cursor: 'pointer'
-  }
+  },
+  toolbar: {
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(1),
+  },
+  title: {
+    flexGrow: 1,
+    display: 'none',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
+    },
+  },
+  search: {
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.black, 0.1),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.black, 0.2),
+    },
+    marginLeft: 0,
+    marginRight: '5px',
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(1),
+      width: 'auto',
+    },
+  },
+  searchIcon: {
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputRoot: {
+    color: 'inherit',
+  },
+  inputInput: {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '12ch',
+      '&:focus': {
+        width: '20ch',
+      },
+    },
+  },
 }));
 
 export default function Works() {
@@ -89,16 +141,26 @@ export default function Works() {
   const dispatch = useDispatch();
   const { works } = useSelector(state => state.worksReducer);
 
+  const [value, setValue] = React.useState('');
+
   //Get products
   useEffect(() => {
     dispatch(worksActions.getWorksAction());
     console.log('Works: ', works);
   }, [dispatch])
 
+  const showSnackBar = () => {
+    dispatch(snackBarActions.showSnackBarAction({ open: true, message: 'Test from work list', closeButton: false }))
+  }
+
+  const onSearch = (event) => {
+    setValue(event.target.value);
+  }
+
   return (
     <Container>
-      <Card className={classes.root} variant="outlined">
-        <CardContent>
+      <Paper className={classes.root} variant="outlined">
+        {/* <CardContent>
           <Grid
             container
             direction="row"
@@ -108,11 +170,33 @@ export default function Works() {
             <Typography gutterBottom variant="h6" component="h2">
               Proyectos
             </Typography>
+            <Button variant="outlined" color="primary" onClick={showSnackBar}>Show</Button>
             <Button variant="outlined" color="primary" component={Link} href="/dashboard/works/work-management">Nuevo proyecto</Button>
           </Grid>
           <WorksTable />
-        </CardContent>
-      </Card>
+        </CardContent> */}
+        <Toolbar className={classes.toolbar}>
+          <Typography className={classes.title} variant="h6" noWrap>
+            Proyectos
+          </Typography>
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div>
+            <InputBase
+              placeholder="Search…"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{ 'aria-label': 'search' }}
+              onKeyUp={onSearch}
+            />
+          </div>
+          <Button variant="outlined" color="primary" component={Link} href="/dashboard/works/work-management" naked>Nuevo proyecto</Button>
+        </Toolbar>
+        <WorksTable value={value} />
+      </Paper>
     </Container>
   );
 }

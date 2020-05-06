@@ -18,6 +18,11 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
 import AuthService from '../services/AuthService';
+import { useSelector, useDispatch } from 'react-redux';
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
+import { snackBarActions } from '../redux/store/actions/SnackBarActions';
 
 const authService = new AuthService();
 
@@ -120,11 +125,19 @@ const useStyles = makeStyles((theme) => ({
 export default function DashboardLayout({ children }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const { snackBar } = useSelector(state => state.snackBarReducer);
+  const dispatch = useDispatch();
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    dispatch(snackBarActions.hideSnackBarAction());
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
@@ -173,6 +186,27 @@ export default function DashboardLayout({ children }) {
         <Container maxWidth="lg" className={classes.container}>
           {children}
         </Container>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          open={snackBar.open}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          message={snackBar.message}
+          action={
+            <React.Fragment>
+              {
+                snackBar.closeButton && (
+                  <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+                )
+              }
+            </React.Fragment>
+          }
+        />
       </main>
     </div>
   );

@@ -14,43 +14,43 @@ import Link from '../src/Link';
 
 export const mainListItems = (
   <div>
-    <ListItem button component={Link} href="/dashboard/home">
+    <ListItem button component={Link} href="/dashboard/home" naked>
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
       <ListItemText primary="Inicio" />
     </ListItem>
-    <ListItem button component={Link} href="/dashboard/works">
+    <ListItem button component={Link} href="/dashboard/works" naked>
       <ListItemIcon>
         <ArtTrackIcon />
       </ListItemIcon>
       <ListItemText primary="Proyectos" />
     </ListItem>
-    <ListItem button component={Link} href="/dashboard/about">
+    <ListItem button component={Link} href="/dashboard/about" naked>
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
       <ListItemText primary="Sobre mi" />
     </ListItem>
-    <ListItem button component={Link} href="/dashboard/messages">
+    <ListItem button component={Link} href="/dashboard/messages" naked>
       <ListItemIcon>
         <InboxIcon />
       </ListItemIcon>
       <ListItemText primary="Mensajes" />
     </ListItem>
-    <ListItem button component={Link} href="/dashboard/images">
+    <ListItem button component={Link} href="/dashboard/images" naked>
       <ListItemIcon>
         <PhotoLibraryIcon />
       </ListItemIcon>
       <ListItemText primary="Imagenes" />
     </ListItem>
-    <ListItem button component={Link} href="/dashboard/categories">
+    <ListItem button component={Link} href="/dashboard/categories" naked>
       <ListItemIcon>
         <CategoryIcon />
       </ListItemIcon>
       <ListItemText primary="Categorias" />
     </ListItem>
-    <ListItem button component={Link} href="/dashboard/social-networks">
+    <ListItem button component={Link} href="/dashboard/social-networks" naked>
       <ListItemIcon>
         <ShareIcon />
       </ListItemIcon>

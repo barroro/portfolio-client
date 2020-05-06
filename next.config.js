@@ -1,25 +1,11 @@
 
+const withPlugins = require('next-compose-plugins');
 const withSass = require('@zeit/next-sass');
+const withImages = require('next-images');
+const withTM = require('next-transpile-modules')(['gsap']);
 
-module.exports = withSass({
-  // webpack: (config, { dev }) => {
-  //   config.module.rules.push(
-  //     {
-  //       test: /\.(css|scss)/,
-  //       loader: 'emit-file-loader',
-  //       options: {
-  //         name: 'dist/[path][name].[ext]'
-  //       }
-  //     },
-  //     {
-  //       test: /\.css$/,
-  //       loader: 'babel-loader!raw-loader'
-  //     },
-  //     {
-  //       test: /\.scss$/,
-  //       loader: 'babel-loader!raw-loader!sass-loader'
-  //     }
-  //   )
-  //   return config
-  // }
-})
+module.exports = withPlugins([
+  [withSass],
+  [withImages],
+  [withTM]
+]);

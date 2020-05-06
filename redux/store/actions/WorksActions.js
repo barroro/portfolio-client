@@ -7,6 +7,9 @@ export const WorksActionTypes = {
   CREATE_WORK: '[Works] Create work',
   CREATE_WORK_SUCCESS: '[Works] Create work success',
   CREATE_WORK_ERROR: '[Works] Create work error',
+  UPDATE_WORK: '[Works] Update work',
+  UPDATE_WORK_SUCCESS: '[Works] Update work success',
+  UPDATE_WORK_ERROR: '[Works] Update work error',
   GET_WORK: '[Works] Get work',
   GET_WORK_SUCCESS: '[Works] Get work success',
   GET_WORK_ERROR: '[Works] Get work error',
@@ -26,15 +29,27 @@ export const worksActions = {
     payload
   }),
   createWorkAction: (payload) => ({
-    type: WorksActionTypes.GET_WORKS,
+    type: WorksActionTypes.CREATE_WORK,
     payload
   }),
   createWorkSuccessAction: (payload) => ({
-    type: WorksActionTypes.WORKS_GET_SUCCESS,
+    type: WorksActionTypes.CREATE_WORK_SUCCESS,
     payload
   }),
   createWorkErrorAction: (payload) => ({
-    type: WorksActionTypes.WORKS_GET_ERROR,
+    type: WorksActionTypes.CREATE_WORK_ERROR,
+    payload
+  }),
+  updateWorkAction: (payload) => ({
+    type: WorksActionTypes.UPDATE_WORK,
+    payload
+  }),
+  updateWorkSuccessAction: (payload) => ({
+    type: WorksActionTypes.UPDATE_WORK_SUCCESS,
+    payload
+  }),
+  updateWorkErrorAction: (payload) => ({
+    type: WorksActionTypes.UPDATE_WORK_ERROR,
     payload
   }),
   getWorkAction: (payload) => ({

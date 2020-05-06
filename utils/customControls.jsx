@@ -24,7 +24,6 @@ export const MyTextField = ({ placeholder, ...props }) => {
 export const MyTextArea = ({ rows, placeholder, ...props }) => {
   const [field, meta] = useField(props);
   const errorText = meta.error && meta.touched ? meta.error : '';
-  console.log(field);
   return (
     <div>
       <TextField

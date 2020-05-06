@@ -30,11 +30,13 @@ import { imageActions } from '../../../redux/store/actions/ImageActions';
 import PreviewImagesDialog from '../../../components/images/preview-images-dialog';
 import PreviewImagesContainer from '../../../components/images/preview-images-container';
 import ImageSelect from '../../../components/images/image-select';
+import LoadingContainer from '../../../components/ui/loading-container';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
     width: '80%',
+    position: 'relative',
     '& .MuiTextField-root': {
       //margin: theme.spacing(1),
       width: '100%',
@@ -114,8 +116,8 @@ const WorkManagement = () => {
   const { query: { id } } = useRouter();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { work } = useSelector(state => state.worksReducer);
-  const { categories, category } = useSelector(state => state.categoryReducer);
+  const { work, workLoading } = useSelector(state => state.worksReducer);
+  const { categories, category, categoryLoading } = useSelector(state => state.categoryReducer);
 
   const [files, setFiles] = useState([]);
   const [formValues, setValues] = useState({
@@ -160,8 +162,8 @@ const WorkManagement = () => {
         category: work.category_id,
         content: work.content,
         photo: null,
-        workImages: [],
-        sections: []
+        workImages: work.images,
+        sections: work.sections
       })
     } else {
       setValues({
@@ -194,23 +196,19 @@ const WorkManagement = () => {
   return (
     <Container>
       <Card className={classes.root} variant="outlined">
+        {workLoading && <LoadingContainer />}
         <Formik
           enableReinitialize
           initialValues={formValues}
           validationSchema={FormSchema}
           onSubmit={(values, { setSubmitting }) => {
-            let settings = { headers: { 'content-type': 'multipart/form-data' } }
-            const data = new FormData();
-            data.append('title', values.title);
-            data.append('subtitle', values.subtitle);
-            data.append('content', values.content);
-            data.append('photo', files[0]);
-            // console.log(data);
-            // Axios.post('http://localhost:8000/api/works', data, settings)
-            //   .then(res => {
-            //     console.log(res);
-            //   })
-            //   .catch(err => console.error(err));
+            if (id) {
+              let data = Object.assign(values, { id: id });
+              dispatch(worksActions.updateWorkAction(data));
+            } else {
+              //console.log(values);
+              dispatch(worksActions.createWorkAction(values));
+            }
             setSubmitting(false);
           }}
         >
@@ -290,6 +288,7 @@ const WorkManagement = () => {
                         title: '',
                         subtitle: '',
                         content: '',
+                        sectionImages: [],
                         id: '' + + Math.random()
                       })}>Nueva seccion</Button>
                       {values.sections.map((section, index) => {
@@ -321,6 +320,9 @@ const WorkManagement = () => {
                             </Grid>
                             <Grid item xs={12}>
                               <MyTextArea name={`sections.${index}.content`} placeholder="Contenido" rows={4}></MyTextArea>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <MyImageSelector name={`sections.${index}.sectionImages`}></MyImageSelector>
                             </Grid>
                           </Grid>
                         )
