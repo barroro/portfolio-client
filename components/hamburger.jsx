@@ -182,6 +182,24 @@ const Hamburger = ({ state }) => {
                 <a href="" className="social-network-link">Facebook</a>
                 <a href="" className="social-network-link">Beehance</a>
               </div>
+              <form className="contact-form">
+                {/* <span className="contact-form-title">Contactar</span> */}
+                <div className="field-wrapper">
+                  <label>Correo electrónico</label>
+                  <input type="text" className="field" />
+                  {/* <small className="error">Es requerido</small> */}
+                </div>
+                <div className="field-wrapper">
+                  <label>Asunto</label>
+                  <input type="text" className="field" />
+                  {/* <small className="error">Es requerido</small> */}
+                </div>
+                <div className="field-wrapper">
+                  <label>Mensaje</label>
+                  <textarea type="text" className="field" rows="6" />
+                  {/* <small className="error">Es requerido</small> */}
+                </div>
+              </form>
             </div>
             {/* <div className="locations">
               Locations:

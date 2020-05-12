@@ -15,6 +15,15 @@ function* getWorks() {
   }
 }
 
+function* getActiveWorks() {
+  try {
+    const { data } = yield call(workService.getActiveWorks);
+    yield put(worksActions.getActiveWorksSuccessAction(data));
+  } catch (error) {
+    yield put(worksActions.getActiveWorksErrorAction(error));
+  }
+}
+
 function* getWork(action) {
   try {
     const { data } = yield call(workService.get, action.payload);
@@ -53,6 +62,7 @@ function* updateWorkSuccess(action) {
 export default function* worksSagas() {
   yield all([
     takeLatest(WorksActionTypes.GET_WORKS, getWorks),
+    takeLatest(WorksActionTypes.GET_ACTIVE_WORKS, getActiveWorks),
     takeLatest(WorksActionTypes.GET_WORK, getWork),
     takeLatest(WorksActionTypes.CREATE_WORK, createWork),
     takeLatest(WorksActionTypes.CREATE_WORK_SUCCESS, createWorkSuccess),

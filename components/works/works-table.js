@@ -70,6 +70,7 @@ export default function WorksTable(props) {
               <TableCell>Título</TableCell>
               <TableCell>Subtítulo</TableCell>
               <TableCell>Categoria</TableCell>
+              <TableCell>Activo</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
@@ -79,13 +80,18 @@ export default function WorksTable(props) {
               .map((w) => (
                 <TableRow key={w.id}>
                   <TableCell component="th" scope="row">
-                    {w.title}
+                    <Link href={{ pathname: '/dashboard/works/work-management', query: { id: w.id } }}>
+                      {w.title}
+                    </Link>
                   </TableCell>
                   <TableCell>{w.subtitle}</TableCell>
                   <TableCell>
                     {
                       w.category && <Chip variant="outlined" size="small" label={w.category.name} color="secondary" />
                     }
+                  </TableCell>
+                  <TableCell>
+                    <Chip size="small" label={w.active ? 'Activo' : 'Inactivo'} color="secondary" disabled={!w.active} />
                   </TableCell>
                   <TableCell>
                     <IconButton size="small" aria-label="delete" component={Link} href={{ pathname: '/dashboard/works/work-management', query: { id: w.id } }}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -11,14 +11,49 @@ import store from '../redux/configureStore';
 import DashboardLayout from '../components/dashboard-layout';
 import PublicLayout from '../components/public-layout';
 
+import { TweenMax } from 'gsap';
+
 export default function MyApp(props) {
   const { Component, pageProps, router } = props;
+
+  // let cursor = useRef(null);
+  // let follower = useRef(null);
+
+  // let posX = 0,
+  //   posY = 0;
+
+  // let mouseX = 0,
+  //   mouseY = 0;
+
+  // TweenMax.to({}, 0.016, {
+  //   repeat: -1,
+  //   onRepeat: function () {
+  //     posX += (mouseX - posX) / 9;
+  //     posY += (mouseY - posY) / 9;
+
+  //     TweenMax.set(follower, {
+  //       css: {
+  //         left: posX - 12,
+  //         top: posY - 12
+  //       }
+  //     });
+
+  //     TweenMax.set(cursor, {
+  //       css: {
+  //         left: mouseX,
+  //         top: mouseY
+  //       }
+  //     });
+  //   }
+  // });
 
   const getLayout = () => {
     if (router.pathname.startsWith('/dashboard/')) {
       return (
         <DashboardLayout>
-          <Component {...pageProps} />
+          <div className="main-container">
+            <Component {...pageProps} />
+          </div>
         </DashboardLayout>
       )
     } else {
@@ -46,9 +81,9 @@ export default function MyApp(props) {
         <ThemeProvider theme={theme}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
-          <div className="main-container">
-            {getLayout()}
-          </div>
+          {/* <div ref={e => cursor = e} class="cursor"></div>
+          <div ref={e => follower = e} class="cursor-follower"></div> */}
+          {getLayout()}
         </ThemeProvider>
       </Provider>
     </React.Fragment>

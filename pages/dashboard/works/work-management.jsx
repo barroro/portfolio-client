@@ -5,7 +5,7 @@ import DashboardLayout from '../../../components/dashboard-layout';
 import { useDispatch, useSelector } from 'react-redux';
 import { worksActions } from '../../../redux/store/actions/WorksActions';
 import { categoryActions } from '../../../redux/store/actions/CategoryActions';
-import { makeStyles, TextField, Grid, IconButton } from '@material-ui/core';
+import { makeStyles, TextField, Grid, IconButton, CardHeader } from '@material-ui/core';
 
 const Typography = dynamic(import("@material-ui/core/Typography"));
 const Container = dynamic(import("@material-ui/core/Container"));
@@ -18,7 +18,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import { Form, Formik, Field, FieldArray, useField } from 'formik';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import { Form, Formik, Field, FieldArray, useField, FastField } from 'formik';
 import Dropzone, { useDropzone } from 'react-dropzone';
 import Axios from 'axios';
 import withAuth from '../../../utils/withAuth';
@@ -34,8 +36,6 @@ import LoadingContainer from '../../../components/ui/loading-container';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    minWidth: 275,
-    width: '80%',
     position: 'relative',
     '& .MuiTextField-root': {
       //margin: theme.spacing(1),
@@ -94,6 +94,11 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '4px',
     padding: '20px',
     cursor: 'pointer'
+  },
+  closeButton: {
+    position: 'absolute',
+    top: '10px',
+    right: '10px'
   }
 }));
 
@@ -124,6 +129,7 @@ const WorkManagement = () => {
     title: '',
     subtitle: '',
     category: '',
+    active: false,
     content: '',
     photo: null,
     workImages: [],
@@ -160,6 +166,7 @@ const WorkManagement = () => {
         title: work.title,
         subtitle: work.subtitle,
         category: work.category_id,
+        active: work.active,
         content: work.content,
         photo: null,
         workImages: work.images,
@@ -170,6 +177,7 @@ const WorkManagement = () => {
         title: '',
         subtitle: '',
         category: '',
+        active: false,
         content: '',
         photo: null,
         workImages: [],
@@ -177,6 +185,11 @@ const WorkManagement = () => {
       })
     }
   }, [work])
+
+  useEffect(() => {
+    if (id)
+      dispatch(worksActions.getWorkAction(id))
+  }, [id])
 
   //Get work by id
   useEffect(() => {
@@ -194,9 +207,11 @@ const WorkManagement = () => {
   }, [files]);
 
   return (
-    <Container>
-      <Card className={classes.root} variant="outlined">
-        {workLoading && <LoadingContainer />}
+    <Grid
+      container
+      spacing={2}
+    >
+      <Grid item xs={12}>
         <Formik
           enableReinitialize
           initialValues={formValues}
@@ -214,135 +229,191 @@ const WorkManagement = () => {
         >
           {({ values, isSubmitting, handleChange, handleBlur }) => (
             <Form>
-              <CardContent>
-                <Typography gutterBottom variant="h6" component="h2">
-                  Añadir nuevo proyecto
-                </Typography>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <MyTextField name="title" placeholder="Título"></MyTextField>
-                  </Grid>
-                </Grid>
-                <Grid container spacing={2}>
-                  <Grid item xs={8}>
-                    <MyTextField name="subtitle" placeholder="Subtítulo"></MyTextField>
-                  </Grid>
-                  <Grid item xs={4}>
-                    {/* <FormControl variant="outlined" size="small" margin="dense" fullWidth className={classes.formControl}>
-                      <InputLabel id="demo-simple-select-filled-label">Categoria</InputLabel>
-                      <Select
-                        labelId="demo-simple-select-filled-label"
-                        id="demo-simple-select-filled"
-                        value={values.category}
-                        onChange={handleChange}
-                      >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
-                        {
-                          categories.map(c => {
-                            return <MenuItem key={c.id} value={c.id}>{c.name}</MenuItem>
-                          })
-                        }
-                      </Select>
-                    </FormControl> */}
-                    <FormControl variant="outlined" size="small" margin="dense" fullWidth className={classes.formControl}>
-                      <InputLabel id="demo-simple-select-filled-label">Categoria</InputLabel>
-                      <Field type="select" as={Select} name="category">
-                        {
-                          categories.map(c => {
-                            return <MenuItem key={c.id} value={c.id}>{c.name}</MenuItem>
-                          })
-                        }
-                      </Field>
-                    </FormControl>
-                  </Grid>
-                </Grid>
-                <Grid container>
-                  <Grid item xs={12}>
-                    <MyTextArea rows={4} placeholder="Contenido" name="content"></MyTextArea>
-                  </Grid>
-                </Grid>
-                <Grid container>
-                  <Grid item xs={12}>
-                    {/* <ImageSelect onChange={onChangeImage}></ImageSelect> */}
-                    <MyImageSelector name="workImages"></MyImageSelector>
-                  </Grid>
-                </Grid>
-                {/* <section className="container">
-                  <div {...getRootProps({ className: classes.dropzone })}>
-                    <input {...getInputProps()} />
-                    <p>Drag 'n' drop some files here, or click to select files</p>
-                  </div>
-                  <aside className={classes.thumbsContainer}>
-                    {thumbs}
-                  </aside>
-                </section> */}
-                <Typography gutterBottom variant="h6" component="h2">
-                  Secciones
-                </Typography>
-                <FieldArray name="sections">
-                  {(arrayHelpers) => (
-                    <div>
-                      <Button onClick={() => arrayHelpers.push({
-                        title: '',
-                        subtitle: '',
-                        content: '',
-                        sectionImages: [],
-                        id: '' + + Math.random()
-                      })}>Nueva seccion</Button>
-                      {values.sections.map((section, index) => {
-                        return (
-                          <Grid
-                            container
-                            direction="column"
-                            spacing={2}
-                            key={section.id}
-                          >
-                            <Grid item xs={12}>
-                              <Grid
-                                container
-                                spacing={2}
-                                alignItems="center"
-                              >
-                                <Grid item xs={6}>
-                                  <MyTextField name={`sections.${index}.title`} placeholder="Título"></MyTextField>
-                                </Grid>
-                                <Grid item xs={5}>
-                                  <MyTextField name={`sections.${index}.subtitle`} placeholder="Subtítulo"></MyTextField>
-                                </Grid>
-                                <Grid item xs={1}>
-                                  <IconButton size="small" onClick={() => arrayHelpers.remove(index)}>
-                                    <CloseIcon />
-                                  </IconButton>
-                                </Grid>
-                              </Grid>
+              <Grid
+                container
+                spacing={2}
+              >
+                <Grid item xs={9}>
+                  <Card variant="outlined" className={classes.root}>
+                    {workLoading && <LoadingContainer />}
+                    <CardContent>
+                      <Grid container spacing={2}>
+                        <Grid item xs={10}>
+                          <Typography gutterBottom variant="h4" component="h2">
+                            {id && work ? `Proyecto: ${work.title}` : 'Añadir nuevo proyecto'}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                      <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                          <MyTextField name="title" placeholder="Título"></MyTextField>
+                        </Grid>
+                      </Grid>
+                      <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                          <MyTextField name="subtitle" placeholder="Subtítulo"></MyTextField>
+                        </Grid>
+                      </Grid>
+                      <Grid container>
+                        <Grid item xs={12}>
+                          <MyTextArea rows={8} placeholder="Contenido" name="content"></MyTextArea>
+                        </Grid>
+                      </Grid>
+                      <Grid container>
+                        <Grid item xs={12}>
+                          <MyImageSelector name="workImages"></MyImageSelector>
+                        </Grid>
+                      </Grid>
+                      {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
+                    </CardContent>
+                  </Card>
+                  {/* <Grid item xs={12}>
+                    <Typography gutterBottom variant="h6" component="h2">
+                      Secciones
+                    </Typography>
+                  </Grid> */}
+                  <FieldArray name="sections">
+                    {(arrayHelpers) => (
+                      <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                          <Grid container spacing={2}>
+                            <Grid item xs={10}>
+                              <Typography gutterBottom variant="h6" component="h2">
+                                Secciones
+                              </Typography>
                             </Grid>
-                            <Grid item xs={12}>
-                              <MyTextArea name={`sections.${index}.content`} placeholder="Contenido" rows={4}></MyTextArea>
-                            </Grid>
-                            <Grid item xs={12}>
-                              <MyImageSelector name={`sections.${index}.sectionImages`}></MyImageSelector>
+                            <Grid item xs={2}>
+                              <Button onClick={() => arrayHelpers.push({
+                                title: '',
+                                subtitle: '',
+                                content: '',
+                                images: [],
+                                view_type: 1,
+                                id: '' + + Math.random()
+                              })}>Nueva seccion</Button>
                             </Grid>
                           </Grid>
-                        )
+                        </Grid>
+                        {
+                          values.sections.map((section, index) => {
+                            return (
+                              <Grid item xs={12}>
+                                <Card variant="outlined" className={classes.root}>
+                                  <IconButton size="small" onClick={() => arrayHelpers.remove(index)} className={classes.closeButton}>
+                                    <CloseIcon />
+                                  </IconButton>
+                                  <CardContent>
+                                    <Grid item xs={12}>
+                                      <Typography gutterBottom variant="h6" component="h2">
+                                        {`Seccion ${index + 1}`}
+                                      </Typography>
+                                    </Grid>
+                                    <Grid
+                                      container
+                                      direction="column"
+                                      spacing={2}
+                                      key={section.id}
+                                    >
+                                      <Grid item xs={12}>
+                                        <Grid
+                                          container
+                                          spacing={2}
+                                          alignItems="center"
+                                        >
+                                          <Grid item xs={7}>
+                                            <MyTextField name={`sections.${index}.title`} placeholder="Título"></MyTextField>
+                                          </Grid>
+                                          <Grid item xs={5}>
+                                            <FormControl variant="outlined" size="small" margin="dense" fullWidth className={classes.formControl}>
+                                              <InputLabel id="demo-simple-select-filled-label">Tipo</InputLabel>
+                                              <Field type="select" as={Select} name={`sections.${index}.view_type`}>
+                                                <MenuItem value={1}>Sección con galería</MenuItem>
+                                                <MenuItem value={2}>Sección con carousel</MenuItem>
+                                                <MenuItem value={3}>Sección sin imagenes</MenuItem>
+                                              </Field>
+                                            </FormControl>
+                                          </Grid>
+                                        </Grid>
+                                      </Grid>
+                                      <Grid item xs={12}>
+                                        <MyTextField name={`sections.${index}.subtitle`} placeholder="Subtítulo"></MyTextField>
+                                      </Grid>
+                                      <Grid item xs={12}>
+                                        <MyTextArea name={`sections.${index}.content`} placeholder="Contenido" rows={8}></MyTextArea>
+                                      </Grid>
+                                      <Grid item xs={12}>
+                                        <MyImageSelector name={`sections.${index}.images`}></MyImageSelector>
+                                      </Grid>
+                                    </Grid>
+                                  </CardContent>
+                                </Card>
+                              </Grid>
+                            )
 
-                      })}
-                    </div>
-                  )}
-                </FieldArray>
-                <pre>{JSON.stringify(values, null, 2)}</pre>
-              </CardContent>
-              <CardActions>
-                <Button size="small" disabled={isSubmitting} type="submit">
-                  submit
-                </Button>
-              </CardActions>
+                          })}
+                      </Grid>
+                    )}
+                  </FieldArray>
+                </Grid>
+                <Grid item xs={3}>
+                  <Grid container spacing={2} style={{ position: 'sticky', top: '90px' }}>
+                    <Grid item xs={12}>
+                      <Card variant="outlined" className={classes.root}>
+                        {workLoading && <LoadingContainer />}
+                        <CardContent>
+                          <Grid container spacing={2}>
+                            <Grid item xs={10}>
+                              <Typography gutterBottom variant="h6" component="h2">
+                                Opciones
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <FormControlLabel
+                                control={<Switch onChange={handleChange} name="active" checked={values.active} />}
+                                label="Visible"
+                              />
+                            </Grid>
+                            <Grid item xs={12}>
+                              <FormControl variant="outlined" size="small" margin="dense" fullWidth className={classes.formControl}>
+                                <InputLabel id="demo-simple-select-filled-label">Categoria</InputLabel>
+                                <Field type="select" as={Select} name="category">
+                                  {
+                                    categories.map(c => {
+                                      return <MenuItem key={c.id} value={c.id}>{c.name}</MenuItem>
+                                    })
+                                  }
+                                </Field>
+                              </FormControl>
+                            </Grid>
+                          </Grid>
+                        </CardContent>
+                        <CardActions>
+                          <Grid container justify="flex-end">
+                            <Button disabled={isSubmitting} type="submit" href="/dashboard/works">
+                              cancelar
+                            </Button>
+                            <Button variant="contained" color="primary" disabled={isSubmitting} type="submit" disableElevation>
+                              guardar
+                            </Button>
+                          </Grid>
+                        </CardActions>
+                      </Card>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Card variant="outlined" className={classes.root} style={{ position: 'sticky', top: '95px' }}>
+                        <CardContent>
+                          Imagen principal
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
             </Form>
           )}
         </Formik>
-      </Card>
-    </Container>
+      </Grid>
+    </Grid>
   );
 }
 

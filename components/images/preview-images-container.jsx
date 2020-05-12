@@ -46,12 +46,13 @@ function PreviewImagesContainer(props) {
             <Grid item xs={4} key={`container-image-` + Math.random()}>
               <Paper variant="outlined" className={classes.paper}>
                 <div className={classes.imgContainer}>
-                  <Img
+                  {/* <Img
                     style={{ backgroundColor: 'grey', width: '100', height: '100' }}
                     className={classes.img}
                     src={`http://localhost:8000/${image.path}`}
                     alt="React Cool Img"
-                  />
+                  /> */}
+                  <img className={classes.img} src={`http://localhost:8000/${image.path}`} />
                 </div>
                 <div className={classes.imgTitle}>
                   <span>{image.name}</span>

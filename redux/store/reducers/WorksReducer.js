@@ -2,6 +2,7 @@ import { WorksActionTypes } from "../actions/WorksActions"
 
 const INITIALSTATE = {
   works: [],
+  activeWorks: [],
   work: null,
   worksLoading: false,
   workLoading: false
@@ -23,6 +24,19 @@ const worksReducer = (state = INITIALSTATE, action) => {
       return {
         ...state,
         works: action.payload,
+        worksLoading: false
+      }
+
+    case WorksActionTypes.GET_ACTIVE_WORKS:
+      return {
+        ...state,
+        worksLoading: true
+      }
+
+    case WorksActionTypes.GET_ACTIVE_WORKS_SUCCESS:
+      return {
+        ...state,
+        activeWorks: action.payload,
         worksLoading: false
       }
 

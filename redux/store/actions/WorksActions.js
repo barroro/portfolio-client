@@ -13,6 +13,9 @@ export const WorksActionTypes = {
   GET_WORK: '[Works] Get work',
   GET_WORK_SUCCESS: '[Works] Get work success',
   GET_WORK_ERROR: '[Works] Get work error',
+  GET_ACTIVE_WORKS: '[Works] Get active works',
+  GET_ACTIVE_WORKS_SUCCESS: '[Works] Get active works success',
+  GET_ACTIVE_WORKS_ERROR: '[Works] Get active works error',
 };
 
 export const worksActions = {
@@ -62,6 +65,18 @@ export const worksActions = {
   }),
   getWorkErrorAction: (payload) => ({
     type: WorksActionTypes.GET_WORK_ERROR,
+    payload
+  }),
+  getActiveWorksAction: (payload) => ({
+    type: WorksActionTypes.GET_ACTIVE_WORKS,
+    payload
+  }),
+  getActiveWorksSuccessAction: (payload) => ({
+    type: WorksActionTypes.GET_ACTIVE_WORKS_SUCCESS,
+    payload
+  }),
+  getActiveWorksErrorAction: (payload) => ({
+    type: WorksActionTypes.GET_ACTIVE_WORKS_ERROR,
     payload
   }),
 }
