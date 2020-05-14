@@ -3,7 +3,9 @@ import { useField } from 'formik';
 import TextField from '@material-ui/core/TextField';
 import ImageSelect from '../components/images/image-select';
 
-export const MyTextField = ({ placeholder, ...props }) => {
+const MemoImageSelect = React.memo(ImageSelect);
+
+const test = ({ placeholder, ...props }) => {
   const [field, meta] = useField(props);
   const errorText = meta.error && meta.touched ? meta.error : '';
   return (
@@ -20,6 +22,8 @@ export const MyTextField = ({ placeholder, ...props }) => {
     </div>
   )
 }
+
+export const MyTextField = React.memo(test);
 
 export const MyTextArea = ({ rows, placeholder, ...props }) => {
   const [field, meta] = useField(props);
@@ -60,9 +64,27 @@ export const MySelect = ({ placeholder, ...props }) => {
   )
 }
 
-export function MyImageSelector(props) {
-  // This isn't an input, so instead of using the values in 'field' directly,
-  // we'll use 'meta' and 'helpers'.
+// export function testImage(props) {
+//   // This isn't an input, so instead of using the values in 'field' directly,
+//   // we'll use 'meta' and 'helpers'.
+//   const [field, meta, helpers] = useField(props.name);
+
+//   const { value } = meta;
+//   const { setValue } = helpers;
+
+//   //const isSelected = v => (v === value ? 'selected' : '');
+
+//   const onChangeImage = (values) => {
+//     setValue(values);
+//   }
+
+//   return (
+//     <ImageSelect onChange={onChangeImage} imagesSelected={value}></ImageSelect>
+//   );
+// }
+
+
+export const MyImageSelector = React.memo(function MyImageSelector(props) {
   const [field, meta, helpers] = useField(props.name);
 
   const { value } = meta;
@@ -75,6 +97,7 @@ export function MyImageSelector(props) {
   }
 
   return (
-    <ImageSelect onChange={onChangeImage} imagesSelected={value}></ImageSelect>
+    <MemoImageSelect onChange={onChangeImage} imagesSelected={value}></MemoImageSelect>
   );
-}
+});
+

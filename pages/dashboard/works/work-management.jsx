@@ -297,7 +297,7 @@ const WorkManagement = () => {
                         {
                           values.sections.map((section, index) => {
                             return (
-                              <Grid item xs={12}>
+                              <Grid item xs={12} key={`section.container.${index}`}>
                                 <Card variant="outlined" className={classes.root}>
                                   <IconButton size="small" onClick={() => arrayHelpers.remove(index)} className={classes.closeButton}>
                                     <CloseIcon />

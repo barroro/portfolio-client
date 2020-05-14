@@ -12,8 +12,11 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import UploadImageDialog from '../../../components/images/upload-image-dialog';
+import Gallery from '../../../components/images/gallery';
 
 const Typography = dynamic(import("@material-ui/core/Typography"));
+
+const MemoraizeGallery = React.memo(Gallery);
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -77,7 +80,8 @@ export default function Images() {
             <Button variant="outlined" color="primary" onClick={handleClickOpen}>Añadir imagen</Button>
             <UploadImageDialog open={modal.open} />
           </Grid>
-          <Grid container spacing={3}>
+          <MemoraizeGallery images={images} />
+          {/* <Grid container spacing={3}>
             {
               images && images.map(image => {
                 return (
@@ -90,6 +94,8 @@ export default function Images() {
                           className={classes.img}
                           src={`http://localhost:8000/${image.path}`}
                           alt="React Cool Img"
+                          cache
+                          debounce={1000}
                         />
                       </div>
                     </Paper>
@@ -97,7 +103,7 @@ export default function Images() {
                 )
               })
             }
-          </Grid>
+          </Grid> */}
         </CardContent>
       </Card>
     </Container>
