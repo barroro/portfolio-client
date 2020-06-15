@@ -52,7 +52,6 @@ export default function SignIn() {
           Sign in
         </Typography>
         <Formik initialValues={{ email: '', password: '' }} onSubmit={(values, { setSubmitting }) => {
-          console.log('values: ', values);
           auth.login(values.email, values.password)
             .then(res => {
               Router.push('/dashboard/home');

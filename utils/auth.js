@@ -7,7 +7,7 @@ import nextCookie from 'next-cookies'
 
 export const auth = ctx => {
   const { token } = nextCookie(ctx)
-  //const token = authService.getToken();
+
   if (ctx.req && !token) {
     ctx.res.writeHead(302, { Location: '/signin' })
     ctx.res.end()
@@ -30,7 +30,6 @@ export const withAuthSync = WrappedComponent =>
 
     static async getInitialProps(ctx) {
       const token = auth(ctx)
-
       const componentProps =
         WrappedComponent.getInitialProps &&
         (await WrappedComponent.getInitialProps(ctx))

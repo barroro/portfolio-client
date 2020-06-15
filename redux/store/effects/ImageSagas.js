@@ -27,7 +27,7 @@ function* getImage(action) {
 function* uploadImage(action) {
   try {
     const { data } = yield call(imageService.uploadImage, action.payload);
-    yield put(imageActions.uploadImageSuccessAction(data.image));
+    yield put(imageActions.uploadImageSuccessAction(data.images));
   } catch (error) {
     yield put(imageActions.uploadImageErrorAction(error));
   }

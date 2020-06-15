@@ -5,6 +5,7 @@ $primary: #323232;
 $accent: #FFE657;
 $red: #e20001;
 $black: #191919;
+$error: rgb(214, 99, 99);
 
 $textDarkColor: rgba(black, 0.85);
 $textLightColor: white;
@@ -27,6 +28,10 @@ html, body {
   &::-webkit-scrollbar {
     width: 0;
   }
+}
+
+.MuiListItem-button.active{
+  background-color: rgba($accent, 0.2);
 }
 
 .main-container{
@@ -238,10 +243,38 @@ nav.header{
           .contact-form-title{
             font-size: 30px;
           }
+          .field-row{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-end;
+            .submit-button{
+              display: inline-flex;
+              align-items: center;
+              font-size: 26px;
+              background-color: transparent;
+              color: #FFE657;
+              border: none;
+              padding: 7px 16px;
+              &:focus{
+                outline: none;
+              }
+              &:disabled{
+                cursor: not-allowed;
+              }
+              img{
+                width: 35px;
+                height: auto;
+                margin-left: 5px;
+              }
+            }
+          }
           .field-wrapper{
+            position: relative;
             margin-bottom: 15px;
             display: flex;
             flex-direction: column;
+            padding-bottom: 20px;
             input, textarea{
               color: $accent;
               position: relative;
@@ -264,6 +297,18 @@ nav.header{
               //   background: $accent;
               //   display: block;
               // }
+            }
+            small.error{
+              color: $error;
+              position: absolute;
+              bottom: 0;
+              left: 0;
+            }
+            &.has-error{
+              input, textarea{
+                color: $error;
+                border-bottom: 1px solid $error;
+              }
             }
           }
         }
@@ -896,6 +941,10 @@ footer{
   justify-content: center;
   border: 2px dashed rgba(#323232, 0.2);
   border-radius: 4px;
+}
+
+.dropzone-container{
+  width: 100%;
 }
 
 .loading-container{

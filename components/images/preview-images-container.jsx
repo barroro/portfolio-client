@@ -66,4 +66,4 @@ function PreviewImagesContainer(props) {
   )
 }
 
-export default PreviewImagesContainer;
+export default React.memo(PreviewImagesContainer);

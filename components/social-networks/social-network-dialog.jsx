@@ -14,6 +14,9 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { TextField } from '@material-ui/core';
 import { socialNetworkActions } from '../../redux/store/actions/socialNetworkActions';
+import { useForm } from 'react-hook-form';
+import { Input } from '../controls';
+import { DevTool } from 'react-hook-form-devtools';
 
 const useStyles = makeStyles({
   avatar: {
@@ -43,9 +46,15 @@ const validationSchema = Yup.object().shape({
 function SocialNetworkDialog(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
+
   const { socialNetwork, socialNetworkSaving, modal } = useSelector(state => state.socialNetworkReducer)
 
-  const [values, setValues] = useState({ title: '', url: '', color: '', icon: '' });
+  const { control, handleSubmit, register, errors, formState, getValues, reset } = useForm({
+    mode: 'onChange',
+    reValidateMode: 'onChange'
+  });
+
+  const { color, icon } = getValues();
 
   const handleClose = () => {
     dispatch(socialNetworkActions.closeSocialNetworkModalAction({ open: false, data: null }));
@@ -53,128 +62,97 @@ function SocialNetworkDialog(props) {
 
   useEffect(() => {
     if (modal.editing) {
-      setValues({
+      reset({
         title: modal.data.title,
         url: modal.data.url,
         color: modal.data.color,
         icon: modal.data.icon
-      })
+      });
     } else {
-      setValues({
+      reset({
         title: '',
         url: '',
         color: '',
         icon: ''
-      })
+      });
     }
-  }, [modal])
+  }, [modal, reset])
+
+  const onSubmit = data => {
+    if (modal.editing) {
+      dispatch(socialNetworkActions.updateSocialNetworkAction({
+        id: modal.data.id,
+        title: data.title,
+        url: data.url,
+        color: data.color,
+        icon: data.icon
+      }));
+    } else {
+      dispatch(socialNetworkActions.createSocialNetworkAction(values));
+    }
+  };
 
   return (
     <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={modal.open}>
       <DialogTitle id="simple-dialog-title">{modal.editing ? 'Modificar red social' : 'Nueva red social'}</DialogTitle>
-      <Formik
-        enableReinitialize
-        initialValues={values}
-        validationSchema={validationSchema}
-        onSubmit={(values, { setSubmitting }) => {
-          if (modal.editing) {
-            dispatch(socialNetworkActions.updateSocialNetworkAction({
-              id: modal.data.id,
-              title: values.title,
-              url: values.url,
-              color: values.color,
-              icon: values.icon
-            }));
-          } else {
-            dispatch(socialNetworkActions.createSocialNetworkAction(values));
-          }
-          //onClose(files);
-          setSubmitting(false);
-        }}>
-        {({ values, isSubmitting, handleChange, handleBlur, isValid }) => (
-          <Form>
-            <DialogContent>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Título"
-                    name="title"
-                    value={values.title}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    size="small"
-                    variant="outlined"
-                    margin="dense">
-                  </TextField>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <DialogContent>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Input
+                register={register}
+                name="title"
+                label="Título"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Input
+                register={register}
+                name="url"
+                label="Url"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={11}>
+                  <Input
+                    register={register}
+                    name="color"
+                    label="Color"
+                  />
                 </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Url"
-                    name="url"
-                    value={values.url}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    size="small"
-                    variant="outlined"
-                    margin="dense">
-                  </TextField>
-                </Grid>
-                <Grid item xs={12}>
-                  <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={11}>
-                      <TextField
-                        fullWidth
-                        label="Color"
-                        name="color"
-                        value={values.color}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        size="small"
-                        variant="outlined"
-                        margin="dense">
-                      </TextField>
-                    </Grid>
-                    <Grid item xs={1}>
-                      <span className={classes.circle} style={{ backgroundColor: values.color }}></span>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid item xs={12}>
-                  <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={11}>
-                      <TextField
-                        fullWidth
-                        label="Icono"
-                        name="icon"
-                        value={values.icon}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        size="small"
-                        helperText="Ejemplo: fab fa-pinterest (Como indica en el página de font-awesome)"
-                        variant="outlined"
-                        margin="dense">
-                      </TextField>
-                    </Grid>
-                    <Grid item xs={1}>
-                      <i className={values.icon} style={{ fontSize: '26px' }}></i>
-                    </Grid>
-                  </Grid>
+                <Grid item xs={1}>
+                  <span className={classes.circle} style={{ backgroundColor: color }}></span>
                 </Grid>
               </Grid>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="primary">
-                Cancelar
+            </Grid>
+            <Grid item xs={12}>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={11}>
+                  <Input
+                    register={register}
+                    name="icon"
+                    label="Icono"
+                    helperText="Ejemplo: fab fa-pinterest (Como indica en el página de font-awesome)"
+                  />
+                </Grid>
+                <Grid item xs={1}>
+                  <i className={icon} style={{ fontSize: '26px' }}></i>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancelar
               </Button>
-              <Button type="submit" color="primary" autoFocus disabled={!isValid}>
-                {socialNetworkSaving ? 'Guardando...' : 'Guardar'}
-              </Button>
-            </DialogActions>
-          </Form>
-        )}
-      </Formik>
+          <Button type="submit" color="primary" autoFocus disabled={!formState.isValid || socialNetworkSaving}>
+            {socialNetworkSaving ? 'Guardando...' : 'Guardar'}
+          </Button>
+        </DialogActions>
+      </form>
+      <DevTool control={control} />
     </Dialog>
   );
 }

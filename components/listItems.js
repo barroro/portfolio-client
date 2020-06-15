@@ -14,43 +14,43 @@ import Link from '../src/Link';
 
 export const mainListItems = (
   <div>
-    <ListItem button component={Link} href="/dashboard/home" naked>
+    <ListItem button component={Link} href="/dashboard/home" naked activeClassName="active">
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
       <ListItemText primary="Inicio" />
     </ListItem>
-    <ListItem button component={Link} href="/dashboard/works" naked>
+    <ListItem button component={Link} href="/dashboard/works" naked activeClassName="active">
       <ListItemIcon>
         <ArtTrackIcon />
       </ListItemIcon>
       <ListItemText primary="Proyectos" />
     </ListItem>
-    <ListItem button component={Link} href="/dashboard/about" naked>
+    <ListItem button component={Link} href="/dashboard/about" naked activeClassName="active">
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
       <ListItemText primary="Sobre mi" />
     </ListItem>
-    <ListItem button component={Link} href="/dashboard/messages" naked>
+    <ListItem button component={Link} href="/dashboard/messages" naked activeClassName="active">
       <ListItemIcon>
         <InboxIcon />
       </ListItemIcon>
       <ListItemText primary="Mensajes" />
     </ListItem>
-    <ListItem button component={Link} href="/dashboard/images" naked>
+    <ListItem button component={Link} href="/dashboard/images" naked activeClassName="active">
       <ListItemIcon>
         <PhotoLibraryIcon />
       </ListItemIcon>
       <ListItemText primary="Imagenes" />
     </ListItem>
-    <ListItem button component={Link} href="/dashboard/categories" naked>
+    <ListItem button component={Link} href="/dashboard/categories" naked activeClassName="active">
       <ListItemIcon>
         <CategoryIcon />
       </ListItemIcon>
       <ListItemText primary="Categorias" />
     </ListItem>
-    <ListItem button component={Link} href="/dashboard/social-networks" naked>
+    <ListItem button component={Link} href="/dashboard/social-networks" naked activeClassName="active">
       <ListItemIcon>
         <ShareIcon />
       </ListItemIcon>

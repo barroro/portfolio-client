@@ -6,11 +6,10 @@ export default class AuthService {
     this.domain = domain || 'http://localhost:8000/api'
     this.fetch = this.fetch.bind(this)
     this.login = this.login.bind(this)
-    this.getProfile = this.getProfile.bind(this)
+    //this.getProfile = this.getProfile.bind(this)
   }
 
   login(email, password) {
-    // Get a token
     return this.fetch(`${this.domain}/users/login`, {
       method: 'POST',
       body: JSON.stringify({
@@ -20,13 +19,9 @@ export default class AuthService {
     }).then(res => {
       //cookie.set("token", res.accessToken, { expires: 1 });
       this.setToken(res.accessToken);
-      this.setProfile(res.user);
+      //this.setProfile(res.user);
       return Promise.resolve(res);
     })
-    // .then(res => {
-    //   this.setProfile(res)
-    //   return Promise.resolve(res)
-    // })
   }
 
   loggedIn() {
@@ -35,42 +30,28 @@ export default class AuthService {
     return !!token //&& !isTokenExpired(token) // handwaiving here
   }
 
-  setProfile(profile) {
-    // Saves profile data to localStorage
-    localStorage.setItem('profile', JSON.stringify(profile))
-  }
-
-  getProfile() {
-    // Retrieves the profile data from localStorage
-    const profile = localStorage.getItem('profile')
-    return profile ? JSON.parse(localStorage.profile) : {}
-  }
-
   setToken(idToken) {
-    // Saves user token to localStorage
     cookie.set("token", idToken);
-    localStorage.setItem('id_token', idToken)
   }
 
   getToken() {
-    // Retrieves the user token from localStorage
-    //return localStorage.getItem('id_token')
     return cookie.get('token');
   }
 
   logout() {
-    // Clear user token and profile data from localStorage
     cookie.remove('token');
-    localStorage.removeItem('id_token');
-    localStorage.removeItem('profile');
     Router.push('/');
   }
 
   _checkStatus(response) {
     // raises an error in case response status is not a success
+    console.log(response);
     if (response.status >= 200 && response.status < 300) {
       return response
     } else {
+      if (response.status === 401) {
+        Router.push('/signin')
+      }
       var error = new Error(response.statusText)
       error.response = response
       throw error
@@ -82,7 +63,7 @@ export default class AuthService {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     }
-
+    console.log('token: ', this.getToken())
     if (this.loggedIn()) {
       headers['Authorization'] = 'Bearer ' + this.getToken()
     }

@@ -42,10 +42,28 @@ const categoryReducer = (state = INITIALSTATE, action) => {
         categoryLoading: false
       }
 
+    case categoryActionTypes.CREATE_CATEGORY:
+      return {
+        ...state,
+        categorySaving: true
+      }
+
     case categoryActionTypes.CREATE_CATEGORY_SUCCESS:
       return {
         ...state,
-        categories: [...state.categories, action.payload]
+        categories: [...state.categories, action.payload],
+        modal: {
+          open: false,
+          editing: false,
+          data: null
+        },
+        categorySaving: false
+      }
+
+    case categoryActionTypes.UPDATE_CATEGORY:
+      return {
+        ...state,
+        categorySaving: true
       }
 
     case categoryActionTypes.UPDATE_CATEGORY_SUCCESS:
@@ -62,7 +80,8 @@ const categoryReducer = (state = INITIALSTATE, action) => {
           open: false,
           editing: false,
           data: null
-        }
+        },
+        categorySaving: false
       }
 
     case categoryActionTypes.DELETE_CATEGORY_SUCCESS:

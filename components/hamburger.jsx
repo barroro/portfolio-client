@@ -1,5 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { gsap } from 'gsap';
+import { useForm } from "react-hook-form";
+import arrow from '../src/icons/arrow-icon-yellow100.svg';
+import { MessageService } from "../services/MessageService";
+import * as Yup from 'yup';
 
 // import dallas from '../images/dallas.webp';
 // import austin from '../images/austin.webp';
@@ -15,6 +19,14 @@ import { gsap } from 'gsap';
 //   { name: 'Beijing', image: beijing }
 // ];
 
+const messageService = new MessageService();
+
+const schema = Yup.object().shape({
+  email: Yup.string().required().email(),
+  subject: Yup.string().required(),
+  body: Yup.string().required().max(200)
+});
+
 const Hamburger = ({ state }) => {
   //Vards for our animated dom nodes
   let menu = useRef(null);
@@ -25,6 +37,17 @@ const Hamburger = ({ state }) => {
   let line2 = useRef(null);
   let line3 = useRef(null);
   let info = useRef(null);
+
+  const { control, handleSubmit, register, errors, formState, getValues, reset } = useForm({
+    mode: 'onChange',
+    reValidateMode: 'onSubmit',
+    defaultValues: {
+      email: '',
+      subject: '',
+      body: ''
+    },
+    validationSchema: schema
+  });
 
   useEffect(() => {
     if (state.clicked === false) {
@@ -163,6 +186,27 @@ const Hamburger = ({ state }) => {
     });
   }
 
+  const [saving, setSaving] = useState(false);
+  const [sent, setSent] = useState(false);
+  const onSubmit = data => {
+    if (formState.isValid) {
+      setSaving(true);
+      messageService.create(data)
+        .then(res => {
+          setSent(true);
+          reset();
+          setTimeout(() => {
+            setSent(false);
+          }, 3000);
+          console.log('Result: ', res);
+        })
+        .catch(err => {
+          console.error(err);
+        })
+        .finally(() => setSaving(false))
+    }
+  };
+
   return <div ref={el => (menu = el)} className='hamburger-menu'>
     <div ref={el => (revealMenuBackground = el)} className="menu-secondary-background-color"></div>
     <div ref={el => (revealMenu = el)} className="menu-layer">
@@ -182,22 +226,28 @@ const Hamburger = ({ state }) => {
                 <a href="" className="social-network-link">Facebook</a>
                 <a href="" className="social-network-link">Beehance</a>
               </div>
-              <form className="contact-form">
+              <form className="contact-form" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
                 {/* <span className="contact-form-title">Contactar</span> */}
                 <div className="field-wrapper">
                   <label>Correo electrónico</label>
-                  <input type="text" className="field" />
-                  {/* <small className="error">Es requerido</small> */}
+                  <input type="text" className="field" name="email" ref={register({ required: true })} />
+                  {errors.email && <small className="error">{errors.email.message}</small>}
                 </div>
                 <div className="field-wrapper">
                   <label>Asunto</label>
-                  <input type="text" className="field" />
-                  {/* <small className="error">Es requerido</small> */}
+                  <input type="text" className="field" name="subject" ref={register({ required: true })} />
+                  {errors.subject && <small className="error">{errors.subject.message}</small>}
                 </div>
                 <div className="field-wrapper">
                   <label>Mensaje</label>
-                  <textarea type="text" className="field" rows="6" />
-                  {/* <small className="error">Es requerido</small> */}
+                  <textarea type="text" className="field" rows="6" name="body" ref={register({ required: true })} />
+                  {errors.body && <small className="error">{errors.body.message}</small>}
+                </div>
+                <div className="field-row align-right">
+                  <button type="input" className="submit-button" disabled={!formState.isValid}>
+                    <span>{saving ? 'Guardando...' : sent ? 'Enviado!' : 'Enviar mensaje'}</span>
+                    <img src={arrow} alt="arrow-right" />
+                  </button>
                 </div>
               </form>
             </div>

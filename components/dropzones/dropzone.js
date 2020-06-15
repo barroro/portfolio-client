@@ -16,7 +16,7 @@ function DropzoneImages(props) {
 
 
   return (
-    <section className="container">
+    <section className="dropzone-container">
       {/* <div {...getRootProps({ className: 'dropzone' })}>
         <input {...getInputProps()} />
         <p>Arrastra las imagenes aquí</p>

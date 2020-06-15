@@ -42,6 +42,12 @@ const socialNetworkReducer = (state = INITIALSTATE, action) => {
         socialNetworkLoading: false
       }
 
+    case socialNetworkActionTypes.CREATE_SOCIAL_NETWORK:
+      return {
+        ...state,
+        socialNetworkSaving: true
+      }
+
     case socialNetworkActionTypes.CREATE_SOCIAL_NETWORK_SUCCESS:
       return {
         ...state,
@@ -50,7 +56,14 @@ const socialNetworkReducer = (state = INITIALSTATE, action) => {
           open: false,
           editing: false,
           data: null
-        }
+        },
+        socialNetworkSaving: false
+      }
+
+    case socialNetworkActionTypes.UPDATE_SOCIAL_NETWORK:
+      return {
+        ...state,
+        socialNetworkSaving: true
       }
 
     case socialNetworkActionTypes.UPDATE_SOCIAL_NETWORK_SUCCESS:
@@ -67,7 +80,8 @@ const socialNetworkReducer = (state = INITIALSTATE, action) => {
           open: false,
           editing: false,
           data: null
-        }
+        },
+        socialNetworkSaving: false
       }
 
     case socialNetworkActionTypes.DELETE_SOCIAL_NETWORK_SUCCESS:

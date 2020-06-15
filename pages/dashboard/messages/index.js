@@ -2,7 +2,7 @@ import React, { useEffect, Fragment, useState } from 'react';
 import dynamic from "next/dynamic";
 
 import { useDispatch, useSelector } from 'react-redux';
-import { worksActions } from '../../../redux/store/actions/WorksActions';
+import { messageActions } from '../../../redux/store/actions/MessageActions';
 import { snackBarActions } from '../../../redux/store/actions/SnackBarActions';
 
 const Typography = dynamic(import("@material-ui/core/Typography"));
@@ -12,7 +12,7 @@ const Paper = dynamic(import("@material-ui/core/Paper"));
 import Toolbar from '@material-ui/core/Toolbar';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import WorksTable from '../../../components/works/works-table';
+import MessagesTable from '../../../components/messages/messages-table';
 import Link from '../../../src/Link';
 import InputBase from '@material-ui/core/InputBase';
 import { fade, makeStyles } from '@material-ui/core/styles';
@@ -137,17 +137,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Works(props) {
+function Messages(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { works } = useSelector(state => state.worksReducer);
 
   const [value, setValue] = React.useState('');
-  console.log(props.token);
   //Get products
   useEffect(() => {
-    dispatch(worksActions.getWorksAction());
-    console.log('Works: ', works);
+    dispatch(messageActions.getMessagesAction());
   }, [dispatch])
 
   const showSnackBar = () => {
@@ -161,21 +158,6 @@ function Works(props) {
   return (
     <Container>
       <Paper className={classes.root} variant="outlined">
-        {/* <CardContent>
-          <Grid
-            container
-            direction="row"
-            justify="space-between"
-            alignItems="center"
-          >
-            <Typography gutterBottom variant="h6" component="h2">
-              Proyectos
-            </Typography>
-            <Button variant="outlined" color="primary" onClick={showSnackBar}>Show</Button>
-            <Button variant="outlined" color="primary" component={Link} href="/dashboard/works/work-management">Nuevo proyecto</Button>
-          </Grid>
-          <WorksTable />
-        </CardContent> */}
         <Toolbar className={classes.toolbar}>
           <Typography className={classes.title} variant="h6" noWrap>
             Proyectos
@@ -194,12 +176,11 @@ function Works(props) {
               onKeyUp={onSearch}
             />
           </div>
-          <Button variant="outlined" color="primary" component={Link} href="/dashboard/works/work-management" naked>Nuevo proyecto</Button>
         </Toolbar>
-        <WorksTable value={value} />
+        <MessagesTable value={value} />
       </Paper>
     </Container>
   );
 }
 
-export default withAuthSync(Works);
+export default withAuthSync(Messages);

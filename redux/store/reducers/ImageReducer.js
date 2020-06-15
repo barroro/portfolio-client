@@ -84,10 +84,15 @@ const imageReducer = (state = INITIALSTATE, action) => {
       }
 
     case ImagesActionTypes.UPLOAD_IMAGE_SUCCESS:
+      var newArrayImages = state.images.concat(action.payload);
       return {
         ...state,
-        images: [...state.images, action.payload],
-        imageUploading: false
+        images: newArrayImages,
+        imageUploading: false,
+        modal: {
+          ...state.modal,
+          open: false
+        }
       }
 
     case ImagesActionTypes.UPLOAD_IMAGE_ERROR:

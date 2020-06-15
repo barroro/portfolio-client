@@ -13,6 +13,7 @@ import CategoriesTable from '../../../components/categories/categories-table';
 import { socialNetworkActions } from '../../../redux/store/actions/socialNetworkActions';
 import SocialNetworksTable from '../../../components/social-networks/social-networks-table';
 import SocialNetworkDialog from '../../../components/social-networks/social-network-dialog';
+import { withAuthSync } from '../../../utils/auth';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function SocialNetworks() {
+function SocialNetworks() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { socialNetworks } = useSelector(state => state.socialNetworkReducer);
@@ -79,3 +80,5 @@ export default function SocialNetworks() {
     </Container>
   );
 }
+
+export default withAuthSync(SocialNetworks);

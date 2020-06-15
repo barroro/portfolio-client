@@ -1,6 +1,6 @@
 import Axios from "axios";
 import { BaseService } from "./BaseService";
-import api from './api';
+import api, { axiosInstance } from './api';
 
 //let settings = { headers: { 'content-type': 'multipart/form-data' } }
 
@@ -20,27 +20,27 @@ export class WorkService extends BaseService {
   }
 
   getWorksApi() {
-    return api.get('works');
+    return axiosInstance.get('works');
   }
 
   getActiveWorks() {
-    return api.get('works/getActiveWorks');
+    return axiosInstance.get('works/getActiveWorks');
   }
 
   get(id) {
-    return api.get('works/' + id);
+    return axiosInstance.get('works/' + id);
   }
 
   create(data) {
-    return api.post('works', data);
+    return axiosInstance.post('works', data);
   }
 
   update(data) {
-    return api.put('works/' + data.id, JSON.stringify(data));
+    return axiosInstance.put('works/' + data.id, JSON.stringify(data));
   }
 
   delete(id) {
-    return api.delete('works/' + id, data);
+    return axiosInstance.delete('works/' + id, data);
   }
 
 }

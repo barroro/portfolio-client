@@ -33,7 +33,9 @@ function UploadImageDialog(props) {
 
   const uploadImage = () => {
     const data = new FormData();
-    data.append('image', files[0]);
+    files.forEach((f, i) => {
+      data.append('image[]', f);
+    });
     dispatch(imageActions.uploadImageAction(data));
     //onClose(files);
   };
